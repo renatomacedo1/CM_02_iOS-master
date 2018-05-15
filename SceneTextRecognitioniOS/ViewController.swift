@@ -1,9 +1,9 @@
 //
 //  ViewController.swift
-//  SceneTextRecognitioniOS
+//  iOS_RMacedo_DCarvalhido
 //
-//  Created by Khurram Shehzad on 09/08/2017.
-//  Copyright © 2017 devcrew. All rights reserved.
+//  Created by Renato Macedo on 03/05/2018.
+//  Copyright © 2018 renatomacedo. All rights reserved.
 //
 
 import AVFoundation
@@ -28,10 +28,13 @@ override func didReceiveMemoryWarning() {
     super.didReceiveMemoryWarning()
     // Dispose of any resources that can be recreated.
 }
+    
+    // creating a text detection request.
 private func configureTextDetection() {
     textDetectionRequest = VNDetectTextRectanglesRequest(completionHandler: handleDetection)
     textDetectionRequest?.reportCharacterBoxes = true
 }
+    // setting current session to preview layer
 private func configureCamera() {
     cameraView.session = session
     
@@ -62,6 +65,7 @@ private func configureCamera() {
     cameraView.videoPreviewLayer.videoGravity = .resize
     session.startRunning()
 }
+    // We are extracting the detected text regions and draw a bounding box around them on screen.
 private func handleDetection(request: VNRequest, error: Error?) {
     
     guard let detectionResults = request.results else {
@@ -87,23 +91,37 @@ private func handleDetection(request: VNRequest, error: Error?) {
         }
         let viewWidth = self.view.frame.size.width
         let viewHeight = self.view.frame.size.height
+        
         for result in textResults {
-
+            
             if let textResult = result {
                 
                 let layer = CALayer()
                 var rect = textResult.boundingBox
+                
                 rect.origin.x *= viewWidth
                 rect.size.height *= viewHeight
                 rect.origin.y = ((1 - rect.origin.y) * viewHeight) - rect.size.height
                 rect.size.width *= viewWidth
 
+                
                 layer.frame = rect
                 layer.borderWidth = 2
                 layer.borderColor = UIColor.red.cgColor
                 self.view.layer.addSublayer(layer)
-            }
-        }
+                
+                //Verificar o tamanho de títulos para colocar outro if de modo a identificar apenas os textos maiores
+                //print("viewWidth")
+                //print(viewWidth)
+                //print("viewHeight")
+                //print(viewHeight)
+                //fim da verificaç\ao
+                
+            }//Fim do if
+            
+        }//Fim do for
+        
+        
     }
 }
 private var cameraView: CameraView {
@@ -131,7 +149,7 @@ private func isAuthorized() -> Bool {
 private var textDetectionRequest: VNDetectTextRectanglesRequest?
 private let session = AVCaptureSession()
 private var textObservations = [VNTextObservation]()
-private var tesseract = G8Tesseract(language: "eng", engineMode: .tesseractOnly)
+private var tesseract = G8Tesseract(language: "pt", engineMode: .tesseractOnly)//estava eng
 private var font = CTFontCreateWithName("Helvetica" as CFString, 18, nil)
 }
 
@@ -177,7 +195,11 @@ func captureOutput(_ output: AVCaptureOutput, didOutput sampleBuffer: CMSampleBu
         guard let cgImage = context.createCGImage(ciImage, from: imageRect) else {
             continue
         }
-        let uiImage = UIImage(cgImage: cgImage)
+        let uiImage = UIImage(cgImage: cgImage)//Imagem recortada de onde identificou o texto
+        //teste tamanho imagem
+        print("Tamanho da imagem recortada")
+        print(uiImage.size)
+        //teste tamanho imagem
         tesseract?.image = uiImage
         tesseract?.recognize()
         guard var text = tesseract?.recognizedText else {
@@ -227,22 +249,16 @@ func captureOutput(_ output: AVCaptureOutput, didOutput sampleBuffer: CMSampleBu
             
             //
             
+            //Narraçao
             let synthesizer = AVSpeechSynthesizer()
             let uterace = AVSpeechUtterance(string: textLayer.string as! String)
-            uterace.voice = AVSpeechSynthesisVoice(language: "un-US")
+            uterace.voice = AVSpeechSynthesisVoice(language: "pt-PT")
             uterace.rate = 0.5
             synthesizer.speak(uterace)
         }
     }
 }
-//    func speech() -> (text:String){
-//        let uterace = AVSpeechUtterance(string: text)
-//        uterace.voice = AVSpeechSynthesisVoice(language: "un-US")
-//        uterace.rate = 0.5
-//
-//        let synthesizer = AVSpeechSynthesizer()
-//        synthesizer.speakUtterance(uterace)
-//    }
+
     
     
 }
