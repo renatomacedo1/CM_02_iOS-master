@@ -18,6 +18,7 @@
 		20A7BF901F3B255000854C42 /* Dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 20A7BF8F1F3B255000854C42 /* Dummy.m */; };
 		20A7BF911F3B257100854C42 /* TesseractOCR.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 20A7BF8C1F3B250A00854C42 /* TesseractOCR.framework */; };
 		64E9ADE81F2A2436007BAC6F /* tessdata in Resources */ = {isa = PBXBuildFile; fileRef = 64E9ADE71F2A2436007BAC6F /* tessdata */; };
+		88FE560F20AB2C480040E52A /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 88FE560E20AB2C480040E52A /* Default-568h@2x.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -36,6 +37,7 @@
 		20A7BF921F3B259100854C42 /* libstdc++.6.0.9.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libstdc++.6.0.9.tbd"; path = "usr/lib/libstdc++.6.0.9.tbd"; sourceTree = SDKROOT; };
 		20A7BF931F3B259800854C42 /* CoreImage.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreImage.framework; path = System/Library/Frameworks/CoreImage.framework; sourceTree = SDKROOT; };
 		64E9ADE71F2A2436007BAC6F /* tessdata */ = {isa = PBXFileReference; lastKnownFileType = folder; path = tessdata; sourceTree = "<group>"; };
+		88FE560E20AB2C480040E52A /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -55,8 +57,9 @@
 		202486441F3AE20500CD12E6 = {
 			isa = PBXGroup;
 			children = (
+				88FE560E20AB2C480040E52A /* Default-568h@2x.png */,
 				20A7BF8C1F3B250A00854C42 /* TesseractOCR.framework */,
-				2024864F1F3AE20500CD12E6 /* SceneTextRecognitioniOS */,
+				2024864F1F3AE20500CD12E6 /* iOS_RMacedo_DCarvalhido */,
 				2024864E1F3AE20500CD12E6 /* Products */,
 				20A7BF8A1F3B243800854C42 /* Frameworks */,
 			);
@@ -70,7 +73,7 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		2024864F1F3AE20500CD12E6 /* SceneTextRecognitioniOS */ = {
+		2024864F1F3AE20500CD12E6 /* iOS_RMacedo_DCarvalhido */ = {
 			isa = PBXGroup;
 			children = (
 				64E9ADE71F2A2436007BAC6F /* tessdata */,
@@ -85,7 +88,7 @@
 				20A7BF8F1F3B255000854C42 /* Dummy.m */,
 				20A7BF8D1F3B254F00854C42 /* SceneTextRecognitioniOS-Bridging-Header.h */,
 			);
-			path = SceneTextRecognitioniOS;
+			path = iOS_RMacedo_DCarvalhido;
 			sourceTree = "<group>";
 		};
 		20A7BF8A1F3B243800854C42 /* Frameworks */ = {
@@ -160,6 +163,7 @@
 				2024865B1F3AE20500CD12E6 /* LaunchScreen.storyboard in Resources */,
 				202486581F3AE20500CD12E6 /* Assets.xcassets in Resources */,
 				202486561F3AE20500CD12E6 /* Main.storyboard in Resources */,
+				88FE560F20AB2C480040E52A /* Default-568h@2x.png in Resources */,
 				64E9ADE81F2A2436007BAC6F /* tessdata in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
