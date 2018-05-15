@@ -110,12 +110,6 @@ private func handleDetection(request: VNRequest, error: Error?) {
                 layer.borderColor = UIColor.red.cgColor
                 self.view.layer.addSublayer(layer)
                 
-                //Verificar o tamanho de títulos para colocar outro if de modo a identificar apenas os textos maiores
-                //print("viewWidth")
-                //print(viewWidth)
-                //print("viewHeight")
-                //print(viewHeight)
-                //fim da verificaç\ao
                 
             }//Fim do if
             
@@ -149,7 +143,7 @@ private func isAuthorized() -> Bool {
 private var textDetectionRequest: VNDetectTextRectanglesRequest?
 private let session = AVCaptureSession()
 private var textObservations = [VNTextObservation]()
-private var tesseract = G8Tesseract(language: "por", engineMode: .tesseractOnly)//estava eng
+private var tesseract = G8Tesseract(language: "eng", engineMode: .tesseractOnly)//estava eng
 private var font = CTFontCreateWithName("Helvetica" as CFString, 18, nil)
 }
 
@@ -198,7 +192,6 @@ func captureOutput(_ output: AVCaptureOutput, didOutput sampleBuffer: CMSampleBu
         let uiImage = UIImage(cgImage: cgImage)//Imagem recortada de onde identificou o texto
 
         
-        //if(uiImage.size.width > 600){
             if(uiImage.size.height > 100){
                 tesseract?.image = uiImage
                 tesseract?.recognize()
@@ -214,6 +207,7 @@ func captureOutput(_ output: AVCaptureOutput, didOutput sampleBuffer: CMSampleBu
                     recognizedTextPositionTuples.append((rect: CGRect(x: x, y: y, width: width, height: height), text: text))
                 }
             }
+        
             textObservations.removeAll()
             DispatchQueue.main.async {
                 let viewWidth = self.view.frame.size.width
@@ -258,66 +252,11 @@ func captureOutput(_ output: AVCaptureOutput, didOutput sampleBuffer: CMSampleBu
             }
         }
         
-        //teste tamanho imagem
-        tesseract?.image = uiImage
-        tesseract?.recognize()
-        guard var text = tesseract?.recognizedText else {
-            continue
-        }
-        text = text.trimmingCharacters(in: CharacterSet.newlines)
-        if !text.isEmpty {
-            let x = xMin
-            let y = 1 - yMax
-            let width = xMax - xMin
-            let height = yMax - yMin
-            recognizedTextPositionTuples.append((rect: CGRect(x: x, y: y, width: width, height: height), text: text))
-        }
-    }
-    textObservations.removeAll()
-    DispatchQueue.main.async {
-        let viewWidth = self.view.frame.size.width
-        let viewHeight = self.view.frame.size.height
-        guard let sublayers = self.view.layer.sublayers else {
-            return
-        }
-        for layer in sublayers[1...] {
-            
-            if let _ = layer as? CATextLayer {
-                layer.removeFromSuperlayer()
-            }
-        }
-        for tuple in recognizedTextPositionTuples {
-            let textLayer = CATextLayer()
-            textLayer.backgroundColor = UIColor.clear.cgColor
-            textLayer.font = self.font
-            var rect = tuple.rect
-
-            rect.origin.x *= viewWidth
-            rect.size.width *= viewWidth
-            rect.origin.y *= viewHeight
-            rect.size.height *= viewHeight
-            
-            // Increase the size of text layer to show text of large lengths
-            rect.size.width += 100
-            rect.size.height += 100
-
-            textLayer.frame = rect
-            textLayer.string = tuple.text
-            textLayer.foregroundColor = UIColor.green.cgColor
-            self.view.layer.addSublayer(textLayer)
-            
-            //
-            
-            //Narraçao
-            let synthesizer = AVSpeechSynthesizer()
-            let uterace = AVSpeechUtterance(string: textLayer.string as! String)
-            uterace.voice = AVSpeechSynthesisVoice(language: "pt-PT")
-            uterace.rate = 0.5
-            synthesizer.speak(uterace)
+        
         }
     }
 }
 
     
     
-}
+
