@@ -1,9 +1,9 @@
 //
 //  Preview.swift
-//  SceneTextRecognitioniOS
+//  iOS_RMacedo_DCarvalhido
 //
-//  Created by Khurram Shehzad on 09/08/2017.
-//  Copyright © 2017 devcrew. All rights reserved.
+//  Created by Renato Macedo on 03/05/2018.
+//  Copyright © 2018 renatomacedo. All rights reserved.
 //
 
 import UIKit

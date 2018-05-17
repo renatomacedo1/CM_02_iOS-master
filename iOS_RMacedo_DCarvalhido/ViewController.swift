@@ -14,10 +14,11 @@ class ViewController: UIViewController {
 
 override func viewDidLoad() {
     super.viewDidLoad()
-    // Do any additional setup after loading the view, typically from a nib.
+ 
+    // Faz qualquer setup adicional apos carregar a view
     tesseract?.pageSegmentationMode = .sparseText
-    // Recognize only these characters
-    tesseract?.charWhitelist = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890()-+*!/?.,@#$%&"
+    // Reconhece os seguintes caracteres
+    tesseract?.charWhitelist = "ABCÇDEFGHIJKLMNOPQRSTUVWXYZabcçdefghijklmnopqrstuvwxyz1234567890()-+*!/?.,@#$%&"
     if isAuthorized() {
         configureTextDetection()
         configureCamera()
@@ -26,15 +27,14 @@ override func viewDidLoad() {
 
 override func didReceiveMemoryWarning() {
     super.didReceiveMemoryWarning()
-    // Dispose of any resources that can be recreated.
 }
     
-    // creating a text detection request.
+    // Criacao do request para detecao de texto
 private func configureTextDetection() {
     textDetectionRequest = VNDetectTextRectanglesRequest(completionHandler: handleDetection)
     textDetectionRequest?.reportCharacterBoxes = true
 }
-    // setting current session to preview layer
+    // Set da sessao para a layer preview
 private func configureCamera() {
     cameraView.session = session
     
@@ -53,7 +53,7 @@ private func configureCamera() {
         }
     }
     catch {
-        print("Error occured \(error)")
+        print("Erro \(error)")
         return
     }
     session.sessionPreset = .high
@@ -65,11 +65,12 @@ private func configureCamera() {
     cameraView.videoPreviewLayer.videoGravity = .resize
     session.startRunning()
 }
-    // We are extracting the detected text regions and draw a bounding box around them on screen.
+
+    // Extrai o texto detetado das regioes de texto e desenha um rectangulo a volta
 private func handleDetection(request: VNRequest, error: Error?) {
     
     guard let detectionResults = request.results else {
-        print("No detection results")
+        print("Nao detetou texto")
         return
     }
     let textResults = detectionResults.map() {
@@ -143,7 +144,7 @@ private func isAuthorized() -> Bool {
 private var textDetectionRequest: VNDetectTextRectanglesRequest?
 private let session = AVCaptureSession()
 private var textObservations = [VNTextObservation]()
-private var tesseract = G8Tesseract(language: "eng", engineMode: .tesseractOnly)//estava eng
+private var tesseract = G8Tesseract(language: "eng", engineMode: .tesseractOnly)//Trocar para "por"
 private var font = CTFontCreateWithName("Helvetica" as CFString, 18, nil)
 }
 
@@ -191,7 +192,7 @@ func captureOutput(_ output: AVCaptureOutput, didOutput sampleBuffer: CMSampleBu
         }
         let uiImage = UIImage(cgImage: cgImage)//Imagem recortada de onde identificou o texto
 
-        
+        //Envia para o Tesseract (identificaçao de texto) apenas os blocos com altura maior que 100 pixels.
             if(uiImage.size.height > 100){
                 tesseract?.image = uiImage
                 tesseract?.recognize()
@@ -232,7 +233,7 @@ func captureOutput(_ output: AVCaptureOutput, didOutput sampleBuffer: CMSampleBu
                     rect.origin.y *= viewHeight
                     rect.size.height *= viewHeight
                     
-                    // Increase the size of text layer to show text of large lengths
+                    // Aumenta o tamanho do text layer para mostrar texto de maiores dimensoes
                     rect.size.width += 100
                     rect.size.height += 100
                     
