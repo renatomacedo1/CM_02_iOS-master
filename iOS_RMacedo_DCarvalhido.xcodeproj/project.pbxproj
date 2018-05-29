@@ -59,7 +59,7 @@
 			children = (
 				88FE560E20AB2C480040E52A /* Default-568h@2x.png */,
 				20A7BF8C1F3B250A00854C42 /* TesseractOCR.framework */,
-				2024864F1F3AE20500CD12E6 /* iOS_RMacedo_DCarvalhido */,
+				2024864F1F3AE20500CD12E6 /* SceneTextRecognitioniOS */,
 				2024864E1F3AE20500CD12E6 /* Products */,
 				20A7BF8A1F3B243800854C42 /* Frameworks */,
 			);
@@ -73,7 +73,7 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		2024864F1F3AE20500CD12E6 /* iOS_RMacedo_DCarvalhido */ = {
+		2024864F1F3AE20500CD12E6 /* SceneTextRecognitioniOS */ = {
 			isa = PBXGroup;
 			children = (
 				64E9ADE71F2A2436007BAC6F /* tessdata */,
@@ -88,7 +88,7 @@
 				20A7BF8F1F3B255000854C42 /* Dummy.m */,
 				20A7BF8D1F3B254F00854C42 /* SceneTextRecognitioniOS-Bridging-Header.h */,
 			);
-			path = iOS_RMacedo_DCarvalhido;
+			path = SceneTextRecognitioniOS;
 			sourceTree = "<group>";
 		};
 		20A7BF8A1F3B243800854C42 /* Frameworks */ = {
