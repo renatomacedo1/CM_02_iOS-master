@@ -18,7 +18,7 @@ override func viewDidLoad() {
     // Faz qualquer setup adicional apos carregar a view
     tesseract?.pageSegmentationMode = .sparseText
     // Reconhece os seguintes caracteres
-    tesseract?.charWhitelist = "ABCÇDEFGHIJKLMNOPQRSTUVWXYZabcçdefghijklmnopqrstuvwxyz1234567890()-+*!/?.,@#$%&"
+    tesseract?.charWhitelist = "AÁÀÃBCÇDEÉÈFGHIÍÌJKLMNOÓÒÕPQRSTUÚÙVWXYZaáàãbcçdeéèfghiíìjklmnoóòõpqrstuúùvwxyz1234567890"//()-+*!/?.,@#$%&
     if isAuthorized() {
         configureTextDetection()
         configureCamera()
@@ -144,7 +144,7 @@ private func isAuthorized() -> Bool {
 private var textDetectionRequest: VNDetectTextRectanglesRequest?
 private let session = AVCaptureSession()
 private var textObservations = [VNTextObservation]()
-private var tesseract = G8Tesseract(language: "eng", engineMode: .tesseractOnly)//Trocar para "por"
+private var tesseract = G8Tesseract(language: "por", engineMode: .tesseractOnly)//Usa o reconhecimento treinado em portugues
 private var font = CTFontCreateWithName("Helvetica" as CFString, 18, nil)
 }
 
@@ -192,8 +192,8 @@ func captureOutput(_ output: AVCaptureOutput, didOutput sampleBuffer: CMSampleBu
         }
         let uiImage = UIImage(cgImage: cgImage)//Imagem recortada de onde identificou o texto
 
-        //Envia para o Tesseract (identificaçao de texto) apenas os blocos com altura maior que 100 pixels.
-            if(uiImage.size.height > 100){
+        //Envia para o Tesseract (identificaçao de texto) apenas os blocos com altura maior que 80 pixels.
+            if(uiImage.size.height > 80){
                 tesseract?.image = uiImage
                 tesseract?.recognize()
                 guard var text = tesseract?.recognizedText else {
@@ -207,53 +207,54 @@ func captureOutput(_ output: AVCaptureOutput, didOutput sampleBuffer: CMSampleBu
                     let height = yMax - yMin
                     recognizedTextPositionTuples.append((rect: CGRect(x: x, y: y, width: width, height: height), text: text))
                 }
-            }
-        
-            textObservations.removeAll()
-            DispatchQueue.main.async {
-                let viewWidth = self.view.frame.size.width
-                let viewHeight = self.view.frame.size.height
-                guard let sublayers = self.view.layer.sublayers else {
-                    return
-                }
-                for layer in sublayers[1...] {
-                    
-                    if let _ = layer as? CATextLayer {
-                        layer.removeFromSuperlayer()
+                
+                textObservations.removeAll()
+                DispatchQueue.main.async {
+                    let viewWidth = self.view.frame.size.width
+                    let viewHeight = self.view.frame.size.height
+                    guard let sublayers = self.view.layer.sublayers else {
+                        return
+                    }
+                    for layer in sublayers[1...] {
+                        
+                        if let _ = layer as? CATextLayer {
+                            layer.removeFromSuperlayer()
+                        }
+                    }
+                    for tuple in recognizedTextPositionTuples {
+                        let textLayer = CATextLayer()
+                        textLayer.backgroundColor = UIColor.clear.cgColor
+                        textLayer.font = self.font
+                        var rect = tuple.rect
+                        
+                        rect.origin.x *= viewWidth
+                        rect.size.width *= viewWidth
+                        rect.origin.y *= viewHeight
+                        rect.size.height *= viewHeight
+                        
+                        // Aumenta o tamanho do text layer para mostrar texto de maiores dimensoes
+                        rect.size.width += 100
+                        rect.size.height += 100
+                        
+                        textLayer.frame = rect
+                        textLayer.string = tuple.text
+                        textLayer.foregroundColor = UIColor.green.cgColor
+                        self.view.layer.addSublayer(textLayer)
+                        
+                        //
+                        
+                        //Narraçao
+                        let synthesizer = AVSpeechSynthesizer()
+                        //let uterace = AVSpeechUtterance(string: textLayer.string as! String)
+                        let uterace = AVSpeechUtterance(string: text)
+                        uterace.voice = AVSpeechSynthesisVoice(language: "pt-PT")
+                        uterace.rate = 0.5
+                        synthesizer.speak(uterace)
+
+                
                     }
                 }
-                for tuple in recognizedTextPositionTuples {
-                    let textLayer = CATextLayer()
-                    textLayer.backgroundColor = UIColor.clear.cgColor
-                    textLayer.font = self.font
-                    var rect = tuple.rect
-                    
-                    rect.origin.x *= viewWidth
-                    rect.size.width *= viewWidth
-                    rect.origin.y *= viewHeight
-                    rect.size.height *= viewHeight
-                    
-                    // Aumenta o tamanho do text layer para mostrar texto de maiores dimensoes
-                    rect.size.width += 100
-                    rect.size.height += 100
-                    
-                    textLayer.frame = rect
-                    textLayer.string = tuple.text
-                    textLayer.foregroundColor = UIColor.green.cgColor
-                    self.view.layer.addSublayer(textLayer)
-                    
-                    //
-                    
-                    //Narraçao
-                    let synthesizer = AVSpeechSynthesizer()
-                    let uterace = AVSpeechUtterance(string: textLayer.string as! String)
-                    uterace.voice = AVSpeechSynthesisVoice(language: "pt-PT")
-                    uterace.rate = 0.5
-                    synthesizer.speak(uterace)
             }
-        }
-        
-        
         }
     }
 }
